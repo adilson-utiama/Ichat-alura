@@ -20,6 +20,9 @@ import br.com.alura.ichat_alura.callback.OuvirMensagensCallback;
 import br.com.alura.ichat_alura.component.ChatComponent;
 import br.com.alura.ichat_alura.modelo.Mensagem;
 import br.com.alura.ichat_alura.service.ChatService;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,9 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private int idDoCliente = 1;
     private List<Mensagem> mensagens;
 
-    private EditText texto;
-    private Button botaoEnviar;
-    private ListView listaDeMensagens;
+    @BindView(R.id.et_texto)
+    EditText texto;
+    @BindView(R.id.btn_enviar)
+    Button botaoEnviar;
+    @BindView(R.id.lv_mensagens)
+    ListView listaDeMensagens;
 
     @Inject
     ChatService chatService;
@@ -41,13 +47,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
         ChatApplication app = (ChatApplication) getApplication();
         component = app.getComponent();
         component.inject(this);
-
-        texto = (EditText) findViewById(R.id.et_texto);
-        botaoEnviar = (Button) findViewById(R.id.btn_enviar);
-        listaDeMensagens = (ListView) findViewById(R.id.lv_mensagens);
 
         mensagens = new ArrayList<>();
         MensagemAdapter adapter = new MensagemAdapter(idDoCliente, mensagens, this);
@@ -55,15 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
         ouvirMensagem();
 
-        botaoEnviar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chatService.enviar((new Mensagem(idDoCliente, texto.getText().toString())))
-                        .enqueue(new EnviarMensagemCallback());
-                texto.setText("");
-            }
-        });
+    }
 
+    @OnClick(R.id.btn_enviar)
+    public void enviarMEnsagem(){
+        chatService.enviar((new Mensagem(idDoCliente, texto.getText().toString())))
+                .enqueue(new EnviarMensagemCallback());
+        texto.setText("");
     }
 
     public void colocaNaLista(Mensagem mensagem){
