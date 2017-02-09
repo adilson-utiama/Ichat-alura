@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "24.0.2"
+    apply plugin: 'com.neenbedankt.android-apt'
 
     defaultConfig {
         applicationId "br.com.alura.ichat_alura"
@@ -25,4 +26,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+    compile 'com.google.dagger:dagger-compiler:2.5'
+    apt 'com.google.dagger:dagger:2.5'
 }

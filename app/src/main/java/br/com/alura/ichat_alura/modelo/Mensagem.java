@@ -1,15 +1,18 @@
 package br.com.alura.ichat_alura.modelo;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Adilson on 06/02/2017.
  */
 public class Mensagem {
 
-    private int id;
+    @SerializedName("text")
     private String texto;
+    private int id;
 
     public Mensagem(int id, String texto) {
-         this.id = id;
+        this.id = id;
         this.texto = texto;
     }
 
@@ -20,4 +23,5 @@ public class Mensagem {
     public int getId() {
         return id;
     }
+
 }
