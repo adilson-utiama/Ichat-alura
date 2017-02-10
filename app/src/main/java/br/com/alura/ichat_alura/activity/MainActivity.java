@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 .load("http://api.adorable.io/avatars/285/" + idDoCliente + ".png")
                 .into(avatar);
 
-        mensagens = new ArrayList<>();
+        if(savedInstanceState != null){
+            mensagens = (List<Mensagem>) savedInstanceState.getSerializable("mensagens");
+        }else {
+            mensagens = new ArrayList<>();
+        }
+
         MensagemAdapter adapter = new MensagemAdapter(idDoCliente, mensagens, this);
         listaDeMensagens.setAdapter(adapter);
 
@@ -79,6 +85,13 @@ public class MainActivity extends AppCompatActivity {
 
         eventBus.register(this);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("mensagens", (ArrayList<Mensagem>) mensagens);
     }
 
     @Override
