@@ -1,5 +1,9 @@
 package br.com.alura.ichat_alura.callback;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
 import br.com.alura.ichat_alura.activity.MainActivity;
 import br.com.alura.ichat_alura.modelo.Mensagem;
 import retrofit2.Call;
@@ -11,23 +15,30 @@ import retrofit2.Response;
  */
 public class OuvirMensagensCallback implements Callback<Mensagem>{
 
-    private MainActivity activity;
+    private Context context;
 
-    public OuvirMensagensCallback(MainActivity activity) {
-        this.activity = activity;
+    public OuvirMensagensCallback(Context context) {
+        this.context = context;
     }
 
     @Override
     public void onResponse(Call<Mensagem> call, Response<Mensagem> response) {
         if(response.isSuccessful()) {
             Mensagem mensagem = response.body();
-            activity.colocaNaLista(mensagem);
-            activity.ouvirMensagem();
+
+            Intent intent = new Intent("nova_mensagem");
+            intent.putExtra("mensagem", mensagem);
+
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+            localBroadcastManager.sendBroadcast(intent);
+
+            //activity.colocaNaLista(mensagem);
+            //activity.ouvirMensagem();
         }
     }
 
     @Override
     public void onFailure(Call<Mensagem> call, Throwable t) {
-            activity.ouvirMensagem();
+            //activity.ouvirMensagem();
     }
 }

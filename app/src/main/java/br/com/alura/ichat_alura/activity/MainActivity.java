@@ -1,5 +1,10 @@
 package br.com.alura.ichat_alura.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -49,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
 
     private ChatComponent component;
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Mensagem mensagem = (Mensagem) intent.getSerializableExtra("mensagem");
+
+            colocaNaLista(mensagem);
+            ouvirMensagem();
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +86,17 @@ public class MainActivity extends AppCompatActivity {
 
         ouvirMensagem();
 
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.registerReceiver(receiver, new IntentFilter("nova_mensagem"));
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.unregisterReceiver(receiver);
     }
 
     @OnClick(R.id.btn_enviar)
