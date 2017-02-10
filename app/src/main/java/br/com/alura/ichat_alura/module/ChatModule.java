@@ -1,6 +1,8 @@
 package br.com.alura.ichat_alura.module;
 
 import android.app.Application;
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
 
 import com.squareup.picasso.Picasso;
 
@@ -35,6 +37,11 @@ public class ChatModule {
 
         ChatService chatService = retrofit.create(ChatService.class);
         return chatService;
+    }
+
+    @Provides
+    public InputMethodManager getInputMethodManager(){
+        return (InputMethodManager) app.getSystemService(app.INPUT_METHOD_SERVICE);
     }
 
     @Provides

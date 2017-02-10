@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     Picasso picasso;
     @Inject
     EventBus eventBus;
+    @Inject
+    InputMethodManager inputMethodManager;
 
     private ChatComponent component;
 
@@ -105,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         chatService.enviar((new Mensagem(idDoCliente, texto.getText().toString())))
                 .enqueue(new EnviarMensagemCallback());
         texto.getText().clear();
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(texto.getWindowToken(), 0);
     }
 
