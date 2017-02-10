@@ -1,8 +1,8 @@
 package br.com.alura.ichat_alura.activity;
 
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,24 +13,23 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import br.com.alura.ichat_alura.app.ChatApplication;
 import br.com.alura.ichat_alura.R;
 import br.com.alura.ichat_alura.adapter.MensagemAdapter;
+import br.com.alura.ichat_alura.app.ChatApplication;
 import br.com.alura.ichat_alura.callback.EnviarMensagemCallback;
 import br.com.alura.ichat_alura.callback.OuvirMensagensCallback;
 import br.com.alura.ichat_alura.component.ChatComponent;
+import br.com.alura.ichat_alura.event.MensagemEvent;
 import br.com.alura.ichat_alura.modelo.Mensagem;
 import br.com.alura.ichat_alura.service.ChatService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import br.com.alura.ichat_alura.event.MensagemEvent;
 import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
@@ -105,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
     public void enviarMEnsagem(){
         chatService.enviar((new Mensagem(idDoCliente, texto.getText().toString())))
                 .enqueue(new EnviarMensagemCallback());
-        texto.setText("");
+        texto.getText().clear();
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(texto.getWindowToken(), 0);
     }
 
     @Subscribe
