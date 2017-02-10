@@ -1,11 +1,12 @@
 package br.com.alura.ichat_alura.callback;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
-import br.com.alura.ichat_alura.activity.MainActivity;
+
+import org.greenrobot.eventbus.EventBus;
+
 import br.com.alura.ichat_alura.modelo.Mensagem;
+import br.com.alura.ichat_alura.event.MensagemEvent;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,14 +27,7 @@ public class OuvirMensagensCallback implements Callback<Mensagem>{
         if(response.isSuccessful()) {
             Mensagem mensagem = response.body();
 
-            Intent intent = new Intent("nova_mensagem");
-            intent.putExtra("mensagem", mensagem);
-
-            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-            localBroadcastManager.sendBroadcast(intent);
-
-            //activity.colocaNaLista(mensagem);
-            //activity.ouvirMensagem();
+            EventBus.getDefault().post(new MensagemEvent(mensagem));
         }
     }
 
