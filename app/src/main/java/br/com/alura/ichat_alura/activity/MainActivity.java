@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     ChatService chatService;
     @Inject
     Picasso picasso;
+    @Inject
+    EventBus eventBus;
 
     private ChatComponent component;
 
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         ouvirMensagem(new MensagemEvent());
 
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
 
     }
 
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        EventBus.getDefault().unregister(this);
+        eventBus.unregister(this);
     }
 
     @OnClick(R.id.btn_enviar)
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void ouvirMensagem(MensagemEvent mensagemEvent) {
         Call<Mensagem> call = chatService.ouvirMensagens();
-        call.enqueue(new OuvirMensagensCallback(this));
+        call.enqueue(new OuvirMensagensCallback(eventBus, this));
     }
 
 

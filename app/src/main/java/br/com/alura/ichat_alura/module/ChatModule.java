@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import br.com.alura.ichat_alura.service.ChatService;
 import dagger.Module;
 import dagger.Provides;
@@ -33,6 +35,11 @@ public class ChatModule {
 
         ChatService chatService = retrofit.create(ChatService.class);
         return chatService;
+    }
+
+    @Provides
+    public EventBus getEventBus(){
+        return EventBus.builder().build();
     }
 
     @Provides

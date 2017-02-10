@@ -5,6 +5,7 @@ import android.content.Context;
 
 import org.greenrobot.eventbus.EventBus;
 
+import br.com.alura.ichat_alura.activity.MainActivity;
 import br.com.alura.ichat_alura.modelo.Mensagem;
 import br.com.alura.ichat_alura.event.MensagemEvent;
 import retrofit2.Call;
@@ -16,10 +17,12 @@ import retrofit2.Response;
  */
 public class OuvirMensagensCallback implements Callback<Mensagem>{
 
-    private Context context;
+    private EventBus eventBus;
+    private MainActivity activity;
 
-    public OuvirMensagensCallback(Context context) {
-        this.context = context;
+    public OuvirMensagensCallback(EventBus eventBus, MainActivity activity) {
+        this.eventBus = eventBus;
+        this.activity = activity;
     }
 
     @Override
@@ -27,7 +30,8 @@ public class OuvirMensagensCallback implements Callback<Mensagem>{
         if(response.isSuccessful()) {
             Mensagem mensagem = response.body();
 
-            EventBus.getDefault().post(new MensagemEvent(mensagem));
+            eventBus.post(new MensagemEvent(mensagem));
+
         }
     }
 
