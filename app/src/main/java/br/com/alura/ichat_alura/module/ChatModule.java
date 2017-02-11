@@ -31,7 +31,7 @@ public class ChatModule {
     @Provides
     public ChatService getChatService(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.100:8080/")
+                .baseUrl("https://adilson-ichat.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
